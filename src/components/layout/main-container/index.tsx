@@ -1,7 +1,11 @@
 import { Outlet } from "react-router-dom"
+import Header from "../../header"
 
 const MainContainer = () => {
-  return <Outlet />
-}
+  return  <>
+            <Header/>
+            <Outlet />
+          </>
+  }
 
 export default MainContainer

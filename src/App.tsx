@@ -3,6 +3,7 @@ import './App.scss'
 import MainContainer from './components/layout/main-container'
 import Home from './pages/home'
 import Shop from './pages/shop'
+import SignIn from './pages/sign-in'
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path='/' element={<MainContainer />}>
           <Route index element={<Home />}/>
           <Route path='/shop' element={<Shop />}/>
+          <Route path='/sign-in' element={<SignIn />}/>
         </Route>
       </Routes>
     </div>
