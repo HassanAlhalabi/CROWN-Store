@@ -1,30 +1,17 @@
 import { getRedirectResult } from "firebase/auth";
 import { useEffect } from "react";
-import { auth, handleCreateGoogleUser, loginWithGoogleRedirect } from "../../firebase"
+import SignInForm from "../../components/auth/sign-in";
+import SignUpForm from "../../components/auth/sign-up";
+import { auth, handleCreateUser } from "../../firebase";
+import "./style.scss"
 
 const SignIn = () => {
-
-    useEffect(() =>  {
-        (async () => {
-            const userData = await getRedirectResult(auth);
-            if(userData) {
-                const user = {
-                    uid: userData.user.uid,
-                    displayName: userData.user.displayName,
-                    email: userData.user.email 
-                }
-                // Handle Add User To DB
-                const userDocument = await handleCreateGoogleUser(user);
-                console.log(userDocument);
-            }
-        })()
-    },[])
     
   return (
-    <>
-      Sign in With Google
-      <button onClick={loginWithGoogleRedirect}>Sign In</button>
-    </>
+    <div className="auth-container mt-4 mb-4 d-flex justify-content-between">
+      <SignInForm />
+      <SignUpForm />
+    </div>
   )
 }
 

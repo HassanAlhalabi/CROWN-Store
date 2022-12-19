@@ -1,0 +1,11 @@
+.auth-container {
+    width: 900px;
+    max-width: 100%;
+    margin: auto;
+
+
+    & > form {
+        width: 45%;
+    }
+
+}

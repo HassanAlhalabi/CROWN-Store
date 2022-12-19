@@ -2,12 +2,15 @@ import { initializeApp } from "firebase/app";
 import { getAuth, 
          GoogleAuthProvider, 
          signInWithPopup, 
-         signInWithRedirect } from 'firebase/auth';
+         signInWithRedirect,
+        createUserWithEmailAndPassword, 
+        UserCredential} from 'firebase/auth';
 import { doc,
          getDoc,
          setDoc,
          getFirestore } from 'firebase/firestore';
-import { GoogleUser } from "../models/users";
+import { User } from "../models/users";
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -34,10 +37,12 @@ export const loginWithGooglePopup = () => signInWithPopup(auth, googleProvider);
 
 export const loginWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
-export const handleCreateGoogleUser = async (user: GoogleUser) => {
+export const handleCreateUser = async (user: Partial<User>) => {
+
+    const {displayName, email} = user;
 
     // Create User Reference
-    const userRef = doc(db,'users',user.uid);
+    const userRef = doc(db,'users',user.uid as string);
 
     // Get User Document
     const userDoc = await getDoc(userRef);
@@ -47,15 +52,24 @@ export const handleCreateGoogleUser = async (user: GoogleUser) => {
         try {
             // Create New User
             await setDoc(userRef,{
-                ...user,
+                displayName,
+                email,
                 createdAt: new Date()
             })
             return userDoc;
         } catch(error) {
-            console.log((error as Error).message)
+            return console.log((error as Error).message)
         }
     }
 
     return userDoc;
 
 } 
+
+export const createEmailPasswordUser = async (email: string, password: string): Promise<UserCredential> => {
+    return await createUserWithEmailAndPassword(auth,email,password)
+}
+
+export const signInEmailAndPassword =  async (email: string, password: string) => {
+    return await signInWithEmailAndPassword(auth, email, password)
+}
