@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast'
 import { Route, Routes } from 'react-router-dom'
 import './App.scss'
 import MainContainer from './components/layout/main-container'
@@ -17,6 +18,15 @@ function App() {
           <Route path='/sign-in' element={<SignIn />}/>
         </Route>
       </Routes>
+      <Toaster
+          position="top-center"
+          reverseOrder={false}
+          gutter={3}
+          containerClassName=""
+          toastOptions={{
+            duration: 3000,
+          }}
+        />
     </div>
   )
 }
