@@ -4,6 +4,8 @@ import { createEmailPasswordUser, handleCreateUser } from '../../../firebase';
 import Button from "../../Button";
 import FormInput from "../../form-input";
 import "./style.scss"
+import { handleFireBaseErrorMessage, notify } from "../../../utils";
+import { FirebaseError } from "firebase/app";
 
 const initialInputsState: SignUpUser = {
     displayName: '',
@@ -36,30 +38,22 @@ const SignUpForm = () => {
 
         // Validate
         if(!displayName || !email || !password) {
-            alert('Required Fields Are Missing')
+            notify('ERROR','Required Fields Are Missing', {id: 'required'})
             return false;
         }
         if(password !== confirmPassword) {
-            alert('Passwords Not Match')
+            notify('ERROR','Passwords Not Match', {id: 'required'})
             return false;
         }
 
         // Add User To Authentication
         let userId = null;
         try {
-            userId = (await createEmailPasswordUser(email, password)).user.uid
-        } catch (error) {
-            return console.log(error)
-        }
-
-        // Add User To DB
-        try {
-            await handleCreateUser({displayName, email, uid: userId});
+            userId = (await createEmailPasswordUser(email, password)).user.uid;
             dispatch(initialInputsState);
         } catch (error) {
-            return console.log(error)
+            return notify('ERROR',handleFireBaseErrorMessage((error as FirebaseError).message), {id: 'error'}) 
         }
-        
     }
 
     return  <form onSubmit={handleSubmit} className="sign-up-container">

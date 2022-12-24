@@ -4,6 +4,8 @@ import FormInput from '../../form-input';
 import './style.scss';
 import { signInEmailAndPassword, loginWithGoogleRedirect, auth, handleCreateUser } from '../../../firebase';
 import { getRedirectResult } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
+import { handleFireBaseErrorMessage, notify } from '../../../utils';
 
 const initialInputsState = {
     email: '',
@@ -34,7 +36,7 @@ const SignInForm = () => {
 
         // Validate
         if( !email || !password) {
-            alert('Required Fields Are Missing')
+            notify('ERROR','Required Fields Are Missing', {id: 'required'})
             return false;
         }
 
@@ -43,7 +45,7 @@ const SignInForm = () => {
             const { user } = await signInEmailAndPassword(email, password);
             dispatch(initialInputsState);
         } catch (error) {
-            return console.log(error)
+            return notify('ERROR',handleFireBaseErrorMessage((error as FirebaseError).message), {id: 'error'}) 
         }
         
     }
