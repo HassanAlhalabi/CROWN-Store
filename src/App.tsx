@@ -2,6 +2,7 @@ import { Toaster } from 'react-hot-toast'
 import { Route, Routes } from 'react-router-dom'
 import './App.scss'
 import MainContainer from './components/layout/main-container'
+import Checkout from './pages/checkout'
 import Home from './pages/home'
 import Shop from './pages/shop'
 import SignIn from './pages/sign-in'
@@ -15,6 +16,7 @@ function App() {
         <Route path='/' element={<MainContainer />}>
           <Route index element={<Home />}/>
           <Route path='/shop' element={<Shop />}/>
+          <Route path='/checkout' element={<Checkout />}/>
           <Route path='/sign-in' element={<SignIn />}/>
         </Route>
       </Routes>
