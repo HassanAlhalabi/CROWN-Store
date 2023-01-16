@@ -2,6 +2,15 @@ import { createContext, useState, useEffect, ReactNode } from 'react';
 import { ICartItem } from '../../models/cart';
 import { Product } from '../../models/products';
 
+export interface ICartContext {
+  cartItems: ICartItem[] | [],
+  addItemToCart: (product: Product) => void,
+  removeItemFromCart: (cartItemToRemove: ICartItem) => void,
+  clearItemFromCart: (cartItemToClear: ICartItem) => void,
+  cartCount: number,
+  cartTotal: number,
+}
+
 export const addCartItem = (cartItems: ICartItem[], productToAdd: Product): ICartItem[] => {
   const existingCartItem = cartItems.find(
     (cartItem) => cartItem.id === productToAdd.id
@@ -40,7 +49,7 @@ const removeCartItem = (cartItems: ICartItem[], cartItemToRemove: ICartItem) => 
 const clearCartItem = (cartItems: ICartItem[], cartItemToClear: ICartItem) =>
   cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
 
-export const CartContext = createContext({
+export const CartContext = createContext<ICartContext>({
   cartItems: [],
   addItemToCart: (product: Product) => {},
   removeItemFromCart: (cartItemToRemove: ICartItem) => {},
