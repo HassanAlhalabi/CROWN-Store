@@ -9,7 +9,11 @@ import { getAuth,
 import { doc,
          getDoc,
          setDoc,
-         getFirestore } from 'firebase/firestore';
+         getFirestore, 
+         writeBatch,
+         collection,
+         query,
+         getDocs} from 'firebase/firestore';
 import { User } from "../models/users";
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -76,3 +80,34 @@ export const signInEmailAndPassword =  async (email: string, password: string) =
 }
 
 export const firebaseLogOut = () => signOut(auth);
+
+export const addCollectionAndDocuments = async (
+    collectionKey: string,
+    objectsToAdd: {
+        title: string,
+    }[]
+  ) => {
+    const batch = writeBatch(db);
+    const collectionRef = collection(db, collectionKey);
+    objectsToAdd.forEach((object) => {
+       const docRef = doc(collectionRef, object.title.toLowerCase());
+       batch.set(docRef, object);
+    });
+  
+    await batch.commit();
+};
+
+export const getCategoriesAndDocuments = async (collectionName: string) => {
+    const collectionRef = collection(db, collectionName);
+    const q = query(collectionRef);
+  
+    const querySnapshot = await getDocs(q);
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+      const { title, items } = docSnapshot.data();
+      acc[title.toLowerCase()] = items;
+      return acc;
+    }, {});
+  
+    return categoryMap;
+  };
+  
