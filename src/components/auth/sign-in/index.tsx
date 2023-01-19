@@ -1,11 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useReducer } from 'react';
 import Button from '../../Button';
 import FormInput from '../../form-input';
-import './style.scss';
 import { signInEmailAndPassword, loginWithGoogleRedirect, auth, handleCreateUser } from '../../../firebase';
 import { getRedirectResult } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { handleFireBaseErrorMessage, notify } from '../../../utils';
+import { SignInContainer } from './style';
 
 const initialInputsState = {
     email: '',
@@ -66,7 +66,7 @@ const SignInForm = () => {
         })()
     },[])
 
-    return  <form onSubmit={handleSubmit}  className="sign-in-container">
+    return  <SignInContainer onSubmit={handleSubmit}>
                 <div className='mb-1'>
                     <h2>Already Has An Account?</h2>
                     <span>Sign In With Your Email And Password</span>
@@ -77,7 +77,7 @@ const SignInForm = () => {
                     <Button type="submit" className='mr-1'>Sign In</Button>
                     <Button type='button' variant='primary' onClick={loginWithGoogleRedirect}>Google Sign In</Button>
                 </div>
-            </form>
+            </SignInContainer>
 }
 
 export default SignInForm

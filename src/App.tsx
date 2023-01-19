@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<MainContainer />}>
           <Route index element={<Home />}/>
-          <Route path='/shop' element={<Shop />}/>
+          <Route path='/shop/*' element={<Shop />}/>
           <Route path='/checkout' element={<Checkout />}/>
           <Route path='/sign-in' element={<SignIn />}/>
         </Route>

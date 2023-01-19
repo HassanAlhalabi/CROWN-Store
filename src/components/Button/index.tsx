@@ -1,9 +1,10 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
-import './style.scss'
+import { BaseButton, InvertedButton, PrimaryButton } from "./styles";
 
-type ButtonTypes = 'inverted' | 'primary'; 
+type ButtonTypes = 'base' | 'inverted' | 'primary'; 
 
 const buttonTypesClasses = {
+    base: 'base',
     inverted: 'inverted',
     primary: 'primary'
 }
@@ -13,10 +14,19 @@ interface Button extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonTypes
 }   
 
+const getButton = (btnType = buttonTypesClasses.base) => {
+    return {
+        [buttonTypesClasses.base] : BaseButton,
+        [buttonTypesClasses.primary]: PrimaryButton,
+        [buttonTypesClasses.inverted] : InvertedButton
+    }[btnType]
+}
+
 const Button = ({children,variant, ...props}: Button) => {
-  return    <button {...props} className={`button-container ${variant && buttonTypesClasses[variant]} ${props.className}`} >
+    const CustomButton = getButton(variant);
+    return  <CustomButton {...props}>
                 {children}
-            </button>
+            </CustomButton>    
 }
 
 export default Button

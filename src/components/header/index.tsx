@@ -1,11 +1,10 @@
-import { Link } from "react-router-dom";
-import './style.scss';
 import logo  from "../../assets/logo.svg";
 import { useContext, useState } from 'react';
 import { AuthContext } from "../../context/auth";
 import { firebaseLogOut } from "../../firebase";
 import CartIcon from "../cart-icon";
 import CartDropdown from "../cart-dropdown";
+import { LogoContainer, NavigationContainer, NavLink, NavLinksContainer } from './style';
 
 const Header = () => {
 
@@ -19,24 +18,24 @@ const Header = () => {
 
     const toggleCart = () => setIsCartOpen(prev => !prev)
 
-    return  <header className="navigation">
-                <div className="logo-container">
-                    <Link to="/">
+    return  <NavigationContainer>
+                <LogoContainer>
+                    <NavLink to="/">
                         <img src={logo} />
-                    </Link>
-                </div>
-                <nav className="nav-links-container">
-                    <ul className="nav-links-container">
-                        <Link className="nav-link" to="/shop">Shop</Link>
+                    </NavLink>    
+                </LogoContainer>
+                <div>
+                    <NavLinksContainer>
+                        <NavLink to="/shop">Shop</NavLink>
                         {
-                            !user ?  <Link className="nav-link" to="/sign-in">Sign In</Link> :
-                                    <span className="nav-link" onClick={handleLogout}>Sign Out</span>
+                            !user ?  <NavLink to="/sign-in">Sign In</NavLink> :
+                                    <NavLink as='span' onClick={handleLogout}>Sign Out</NavLink>
                         }
                         <CartIcon toggleCart={toggleCart} />
-                    </ul>
-                    {isCartOpen && <CartDropdown />}
-                </nav>
-            </header>
+                        {isCartOpen && <CartDropdown />}
+                    </NavLinksContainer>
+                </div>
+            </NavigationContainer>
 }
 
 export default Header

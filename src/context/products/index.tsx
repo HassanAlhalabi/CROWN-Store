@@ -9,7 +9,6 @@ export const CategoriesContext = createContext({
 
 
 export const CategoriesProvider = ({children}:{children: ReactNode}) => {
-
     const [categoriesMap, setCategoriesMap] = useState({});
 
     useEffect(() => {

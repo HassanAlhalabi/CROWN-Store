@@ -3,9 +3,9 @@ import { SignUpUser } from "../../../models/users";
 import { createEmailPasswordUser, handleCreateUser } from '../../../firebase';
 import Button from "../../Button";
 import FormInput from "../../form-input";
-import "./style.scss"
 import { handleFireBaseErrorMessage, notify } from "../../../utils";
 import { FirebaseError } from "firebase/app";
+import { SignUpContainer } from "./style";
 
 const initialInputsState: SignUpUser = {
     displayName: '',
@@ -56,7 +56,7 @@ const SignUpForm = () => {
         }
     }
 
-    return  <form onSubmit={handleSubmit} className="sign-up-container">
+    return  <SignUpContainer onSubmit={handleSubmit}>
                 <div className="mb-1">
                     <h2>Don't Hava An Account?</h2>
                     <span>Sign Up With Your Email And Password</span>
@@ -66,7 +66,7 @@ const SignUpForm = () => {
                 <FormInput label="Password" type="password" name="password" value={inputs.password} onChange={handleInputs}/>
                 <FormInput label="Confirm Password" type="password" name="confirmPassword" value={inputs.confirmPassword} onChange={handleInputs}/>
                 <Button type="submit">Sign Up</Button>
-            </form>
+            </SignUpContainer>
 }
 
 export default SignUpForm

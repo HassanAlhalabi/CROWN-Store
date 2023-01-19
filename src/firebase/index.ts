@@ -16,6 +16,7 @@ import { doc,
          getDocs} from 'firebase/firestore';
 import { User } from "../models/users";
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { CategoryMap } from '../models/category/index';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -103,7 +104,7 @@ export const getCategoriesAndDocuments = async (collectionName: string) => {
   
     const querySnapshot = await getDocs(q);
     const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-      const { title, items } = docSnapshot.data();
+      const { title, items } = docSnapshot.data() as CategoryMap;
       acc[title.toLowerCase()] = items;
       return acc;
     }, {});

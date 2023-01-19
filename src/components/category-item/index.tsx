@@ -1,21 +1,16 @@
 import { ICategory } from '../../models/category';
-import './style.scss';
+import { CategoryItemContainer, CategoryBodyContainer, BackgroundImage } from './style';
 
 const CategoryItem = ({ category }: {category: ICategory}) => {
   const { imageUrl, title } = category;
   return (
-    <div className='category-container'>
-      <div
-        className='background-image'
-        style={{
-          backgroundImage: `url(${imageUrl})`,
-        }}
-      />
-      <div className='category-body-container'>
+    <CategoryItemContainer>
+      <BackgroundImage imageUrl={imageUrl} />
+      <CategoryBodyContainer>
         <h2>{title}</h2>
         <p>Shop Now</p>
-      </div>
-    </div>
+      </CategoryBodyContainer>
+    </CategoryItemContainer>
   );
 };
 
