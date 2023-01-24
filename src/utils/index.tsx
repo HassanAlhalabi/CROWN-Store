@@ -21,3 +21,6 @@ export const notify = (type: Notification = 'BLANK', message: string, config?: T
             return toast(message,config); ;
     }
 }
+
+export const createAction = (type: string, payload: any) => 
+    ({type, payload})

@@ -1,6 +1,7 @@
-import { createContext, useState, useEffect, ReactNode } from 'react';
-import { ICartItem } from '../../models/cart';
+import { createContext, useEffect, ReactNode, useReducer } from 'react';
+import { ICart, ICartItem } from '../../models/cart';
 import { Product } from '../../models/products';
+import { createAction } from '../../utils';
 
 export interface ICartContext {
   cartItems: ICartItem[] | [],
@@ -10,6 +11,12 @@ export interface ICartContext {
   cartCount: number,
   cartTotal: number,
 }
+
+const CART_INITIAL_STATE : ICart = {
+  cartItems: [],
+  cartCount: 0,
+  cartTotal: 0
+};
 
 export const addCartItem = (cartItems: ICartItem[], productToAdd: Product): ICartItem[] => {
   const existingCartItem = cartItems.find(
@@ -58,46 +65,67 @@ export const CartContext = createContext<ICartContext>({
   cartTotal: 0,
 });
 
+const CART_ACTION_TYPES = {
+  updateCart: 'UPDATE_CART',
+  addToCart: 'ADD_TO_CART',
+  removeFromCart: 'REMOVE_FROM_CART',
+  clearCart: 'CLEAR_CART',
+  setCartTotal: 'SET_CART_TOTAL',
+  setCartCount: 'SET_CART_COUNT'
+}
+
+const cartReducer = (state: ICart, action: any) => {
+  const {type, payload} = action;
+  
+  switch (type) {
+    case CART_ACTION_TYPES.updateCart:
+      return {
+        ...state,
+        ...payload
+      }
+    default:
+      return state
+  }
+}
+
 export const CartProvider = ({ children }: {children: ReactNode}) => {
 
-  const [cartItems, setCartItems] = useState<ICartItem[]>([]);
-  const [cartCount, setCartCount] = useState(0);
-  const [cartTotal, setCartTotal] = useState(0);
+  const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
-  useEffect(() => {
+  const updateCartItems = (cartItems: ICartItem[]) => {
     const count = cartItems.reduce(
-      (total, cartItem) => total + cartItem.quantity,
+      (cartTotal: number, cartItem: ICartItem) => cartTotal + cartItem.quantity,
       0
     );
-    setCartCount(count);
-  }, [cartItems]);
-
-  useEffect(() => {
     const newCartTotal = cartItems.reduce(
-      (total, cartItem) => total + cartItem.quantity * cartItem.price,
+      (cartTotal: number, cartItem: ICartItem) => cartTotal + cartItem.quantity * cartItem.price,
       0
     );
-    setCartTotal(newCartTotal);
-  }, [cartItems]);
+    dispatch(createAction(CART_ACTION_TYPES.updateCart, 
+      {
+        cartItems,
+        cartCount: count,
+        cartTotal: newCartTotal
+      }));
+  }
 
-  const removeItemFromCart = (cartItemToRemove: ICartItem) => {
-    setCartItems(removeCartItem(cartItems, cartItemToRemove));
-  };
+  const removeItemFromCart = (cartItemToRemove: ICartItem) => 
+    updateCartItems(removeCartItem(state.cartItems, cartItemToRemove));
 
-  const clearItemFromCart = (cartItemToClear: ICartItem) => {
-    setCartItems(clearCartItem(cartItems, cartItemToClear));
-  };
+
+  const clearItemFromCart = (cartItemToClear: ICartItem) =>
+    updateCartItems(clearCartItem(state.cartItems, cartItemToClear));
 
   const addItemToCart = (product: Product) =>
-    setCartItems(addCartItem(cartItems, product) as ICartItem[]);
+    updateCartItems(addCartItem(state.cartItems, product) as ICartItem[])
 
   return    <CartContext.Provider value={{
                                         addItemToCart,
                                         removeItemFromCart,
                                         clearItemFromCart,
-                                        cartCount,
-                                        cartTotal,
-                                        cartItems
+                                        cartCount: state.cartCount,
+                                        cartTotal:  state.cartTotal,
+                                        cartItems: state.cartItems
                                     }}>
                 {children}
             </CartContext.Provider>;
