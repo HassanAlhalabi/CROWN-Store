@@ -9,6 +9,7 @@ import './style.scss';
 
 const CategoryPreview = () => {
   const categoriesMap = useSelector(selectCategoriesMap);
+  console.log('Category Preview Rerender')
 
   return(
     <>

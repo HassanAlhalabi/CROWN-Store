@@ -12,6 +12,8 @@ const Category = () => {
     const categoriesMap = useSelector(selectCategoriesMap);
     const [products, setProducts] = useState<Product[]>([]); 
 
+    console.log('Categories Rerender');
+
     useEffect(() => {
         if(category) {
             setProducts(categoriesMap[category]);   
