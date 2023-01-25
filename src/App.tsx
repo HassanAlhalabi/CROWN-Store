@@ -1,14 +1,32 @@
+import { onAuthStateChanged } from 'firebase/auth'
+import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
+import { useDispatch } from 'react-redux/es/exports'
 import { Route, Routes } from 'react-router-dom'
 import './App.scss'
 import MainContainer from './components/layout/main-container'
+import { auth } from './firebase'
 import Checkout from './pages/checkout'
 import Home from './pages/home'
 import Shop from './pages/shop'
 import SignIn from './pages/sign-in'
+import { setUser } from './store/reducers/user/actionCreators'
 
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unSubscribe = onAuthStateChanged(auth,(user) => {
+      if(user) {
+          dispatch(setUser(user));
+          return unSubscribe;
+      }
+      dispatch(setUser(null));
+    })
+    return unSubscribe;
+  })
 
   return (
     <div className="App">

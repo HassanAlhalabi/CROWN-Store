@@ -1,16 +1,17 @@
 import logo  from "../../assets/logo.svg";
-import { useContext, useState } from 'react';
-import { AuthContext } from "../../context/auth";
+import { useState } from 'react';
 import { firebaseLogOut } from "../../firebase";
 import CartIcon from "../cart-icon";
 import CartDropdown from "../cart-dropdown";
 import { LogoContainer, NavigationContainer, NavLink, NavLinksContainer } from './style';
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { selectUser } from "../../store/reducers/user/selectors";
 
 const Header = () => {
 
     const [isCartOpen, setIsCartOpen] = useState(false);
     
-    const {user} = useContext(AuthContext);
+    const user = useSelector(selectUser);
 
     const handleLogout = async () => {
         await firebaseLogOut();

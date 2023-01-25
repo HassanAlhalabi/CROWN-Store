@@ -1,0 +1,5 @@
+
+
+export const CATEGORIES_ACTIONS = {
+    SET_CATEGORIES: 'SET_CATEGORIES'
+} 
