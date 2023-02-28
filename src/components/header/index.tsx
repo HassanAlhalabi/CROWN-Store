@@ -13,8 +13,6 @@ const Header = () => {
     
     const user = useSelector(selectUser);
 
-    console.log('Header Rerender')
-
     const handleLogout = async () => {
         await firebaseLogOut();
     }
